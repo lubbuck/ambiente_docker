@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:  # Altere as variaveis de anbientes e as portas para as de sua preferencia
+  app_node: # seu app aqui
+    build: .
+    container_name: app_node
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/usr/app
+    networks:
+      - app_network 
+
+  postgres_db:
+    image: postgres
+    container_name: postgres_db
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_USER=postgres_user
+      - POSTGRES_PASSWORD=postgres_password
+      - POSTGRES_DB=postgres_db
+    volumes:
+      - pgdata:/data/postgres
+    networks:
+      - app_network 
+
+  # mongo_db:
+  #   image: mongo
+  #   container_name: mongo_db
+  #   ports:
+  #     - 27018:27017
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: mongo_user
+  #     MONGO_INITDB_ROOT_PASSWORD: mongo_password
+  #   networks:
+  #     - app_network 
+
+  # redis:
+  #   image: redis:alpine
+  #   ports:
+  #     - "6379:6379"
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  pgdata:
+    driver: local
